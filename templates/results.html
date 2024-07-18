@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>結果</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        font-size: 1.5rem; /* 字體變大 */
+        margin: 0;
+        background-color: #e0f7fa; /* 淺藍色背景 */
+      }
+      .container {
+        background-color: #ffffff; /* 白色背景 */
+        padding: 4rem; /* 增加內邊距 */
+        border-radius: 0.5rem;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        transform: scale(1.5); /* 等比例放大 */
+      }
+      h1 {
+        margin-bottom: 1rem;
+        color: #00796b; /* 綠色標題 */
+        position: relative;
+        z-index: 1;
+      }
+      a {
+        font-size: 1.25rem; /* 字體變大 */
+        background-color: #007bff; /* 按鍵藍色 */
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 0.25rem;
+        text-decoration: none;
+        position: relative;
+        z-index: 1;
+      }
+      a:hover {
+        background-color: #0056b3;
+      }
+      /* 裝飾性元素 */
+      .decoration {
+        position: absolute;
+        border-radius: 50%;
+        z-index: 0;
+      }
+      .decoration1 {
+        width: 150px;
+        height: 150px;
+        background-color: rgba(0, 123, 255, 0.1); /* 淺藍色圓 */
+        top: -50px;
+        right: -50px;
+      }
+      .decoration2 {
+        width: 100px;
+        height: 100px;
+        background-color: rgba(0, 150, 136, 0.1); /* 淺綠色圓 */
+        bottom: -50px;
+        left: -50px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Finish!</h1>
+      <a href="/download">Download results</a>
+      <!-- 裝飾性元素 -->
+      <div class="decoration decoration1"></div>
+      <div class="decoration decoration2"></div>
+    </div>
+  </body>
+</html>

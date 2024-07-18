@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Hammett Plot</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        font-size: 1.5rem;
+        margin: 0;
+        background-color: #e0f7fa; /* Background color */
+        position: relative; /* For positioning the circles */
+      }
+      form {
+        background-color: white;
+        padding: 2rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+        text-align: center;
+        max-width: 600px;
+      }
+      h1 {
+        margin-bottom: 1rem;
+        color: #00796b; /* Title color */
+      }
+      div {
+        margin-bottom: 1rem;
+      }
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #00796b; /* Label color */
+      }
+      select, input {
+        font-size: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 0.25rem;
+        padding: 0.25rem;
+      }
+      button {
+        font-size: 1.25rem;
+        background-color: #009688; /* Button color */
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 0.25rem;
+        cursor: pointer;
+        margin: 0.5rem; /* Add margin for spacing between buttons */
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+      table th {
+        color: #00796b; /* Header color for table */
+      }
+      .circle {
+        position: absolute;
+        border-radius: 50%;
+        background-color: #e0f7fa;
+      }
+      .circle.top-right {
+        width: 100px;
+        height: 100px;
+        top: -50px;
+        right: -50px;
+      }
+      .circle.bottom-left {
+        width: 150px;
+        height: 150px;
+        bottom: -75px;
+        left: -75px;
+      }
+    </style>
+    <script>
+      let substituents =['BF2', 'Br', 'GeBr3', 'SiBr3', 'Cl', 'HgCl', 'S02Cl', 'SCl', 'ICl2', 'P(O)Cl2', 'PCl2', 'P(S)Cl2',
+      'GeCl3', 'SiCl3', 'F', 'HgF', 'SOF', 'SO2F', 'IF2', 'POF2', 'PF2', 'GeF3', 'SF3', 'SiF3', 'IF4', 'PF4',
+      'SF5', 'I', 'IO', 'IO2', 'NO', 'NO2', 'ONO2', 'N≣N+', 'N≣N+(BF4)-', 'NNO2-', 'N3', 'O-', 'SO2-', 'S03-',
+      'S-', 'AsO3H-', 'H', 'NHNO2', 'OH', 'S(O)OH', 'PO3H-', 'OPO3H-', 'SH', 'B(OH)2', 'NH2', 'NHOH', 'SO2NH2',
+      'PO(OH)2', 'PH2', 'B(OH)3-', 'GeH3', 'NH3+', 'NHNH2', 'SiH3', 'CBr3', 'CClF2', '5-chloro-1-tetrazolyl', 'COCl',
+      'N=CCl2', 'CCl3', 'OCCl3', 'COF', 'OCF2O', 'CF3', 'HgCF3', 'HgSCF3', 'I=NSO2CF3', 'N=NCF3', 'OCF3', 'SOCF3', 'SeOCF3',
+      'SO2CF3', 'SeO2CF3', 'OSO2CF3', 'SCF3', 'SeCF3', 'HgCN', 'CN', 'NC', 'CN(BBr3)', 'CN(BCl3)', 'CN(BF3)', 'N=C=O', 'OCN',
+      'SO2CN', 'N=C=S', 'SCN', 'SeCN', 'N=NCN', 'N(O)=NCN', 'C(N02)3', '5-azido-l-tetrazolyl', 'CO2-', 'CHBr2', 'CHCl2', 'OCHCl2',
+      'CHF2', 'OCHF2', 'SOCHF2', 'SO2CHF2', 'SCHF2', 'S(O)(=NH)CF3', 'NHSO2CF3', 'CHI2', 'NHCN', 'l-(1H)-tetrazolyl',
+      '5-(lH)-tetrazolyl', '5-hydroxy-1 -tetrazolyl', '5-mercapto-1 -tetrazolyl', 'CHO', 'COOH', 'CH2Br', 'CH2Cl',
+      'OCH2Cl', 'CH2F', 'OCH2F', 'SCH2F', 'CH2I', 'NHCHO', 'CONH2', 'CSNH2', 'trans-CH=NOH', 'N(O)=NCONH2', 'Me',
+      'SiMeCl2', 'SiMeF2', 'HgMe', 'NHCH2SO3', 'NHCONH2', 'N(Me)N02', 'NHC(S)NH2', 'OMe', 'CH2OH', 'S(O)Me', 'S(OMe)',
+      'OS(=O)CH3', 'S(O)OMe', 'SO2Me', 'SSO2Me', 'OSO2Me', 'SMe', 'SSMe', 'SeMe', 'NHMe', 'CH2NH2', 'NHSO2Me', 'CH2NH3+',
+      'N(COF)2', 'HgOCOCF3', 'COCF3', 'SCOCF3', 'OCOCF3', 'N(CF3)C=O(F)', 'CF2OCF2-', 'CF2CF3', 'OCF2CF3', 'SO2CF2CF3', 
+      'SCF2CF3', 'N(CF3)2', 'S(CF3)=NSO2CF3', 'SO(CF3)=NSO2CF3', 'N(SO2CF3)2', 'P(CF3)2', 'P(CN)2', 'C≣CH', 'OCF2CHFCl',
+      'NHCOCF3', 'CH=NSO2CF3', 'OCF2CHF2', 'SCF2CHF2', 'SC≣CH', 'SCH=CHCl', 'SeCH=CHCl', 'CH2CF3', 'CH2SOCF3', 'CH2SO2CF3',
+      'CH2SCF3', 'CH2CN', 'trans-CH=CHNO2', 'CH2CO2-', 'CH2SCN', 'CH=CH2', 'NHCOCH2Cl', 'N(Me)SO2CF3', 'HgOCOCH3', 'C(Me)(NO2)2',
+      'oxiranyl', 'OCH=CH2', 'COMe', 'SCOMe', 'OCOMe', 'COOMe', '2-thiacyclopropyl', 'SCH=CH2', 'SeCH=CH2', '1-aziridinyl', 
+      '2-aziridinyl', 'N-methyl-3-oxaziridinyl', 'NHCOOMe', 'NHCOMe', 'CONHMe', 'CH=NOMe', 'CH2CONH2', 'NHCSMe', 'CSNHMe',
+      'CH=NNHCSNH2', 'OCH2CH2O-', 'Et', 'CH=NNHCONHNH2', 'OCH2CH3', 'CH(OH)Me', 'CH2OMe', 'SO2Et', 'SEt', 'P(Cl)NMe2', 
+      'CH2SC(NH2)2+', 'SiClMe2', 'SiFMe2', 'NHEt', 'N(Me)2', 'N(Me)SO2Me', 'SO2NMe2', 'N(SO2Me)2', 'SN(Me)2', 'N=NNMe2',
+      'N(Me)N+=(Me)N-', 'P(O)Me2', 'PO(OMe)2', 'PMe2', 'S+Me2', 'CH2CH2NH3+', 'SiH(Me)2', '1-(1,7(BH)10-C2H)', '2-(l,7(BH)10-C2H)',
+      '4-(l,7(BH)10-C2H)', '1-(1,2(BH)10-C2H)', '3-(l,2(BH)10-C2H)', 'C≣CCF3', 'trans-CF=CFCF3', 'N=C(CF3)2', 'CF2CF2CF3',
+      'CF(CF3)2', 'SO2CF2CF2CF3', 'SO2CF(CF3)2', 'SCF2CF2CF3', 'SCF(CF3)2', 'TeCF2CF2CF3', 'C(OH)(CF3)2', 'CH(SCF3)2', 'CH(CN)2',
+      'cis-CH=CHCF3', 'trans-CH=CHCF3', 'CH=CHSO2CF3', 'CH=CHCN', 'C≣CMe', 'N(Me)COCF3', 'CH=CHCHO', 'cyclopropyl', 'C(Me)=CH2',
+      'trans-CH=CHMe', 'CH2CH=CH2', 'C(Et)(NO2)2', 'OCH2CH=CH2', 'COEt', 'COOEt', 'CH2OCOMe', 'CH2CH2COOH', 'SCH2CH=CH2',
+      'SeCH2CH=CH2', 'CH2CH2CH2-', 'N(Me)COMe', 'CH2NHCOMe', 'NHCOOEt', 'C(NO2)Me2', 'OCH2CH2CH2O-', 'isopropyl', 'CH2CH2CH3',
+      'N+(Me)=CHN(Me)-', 'NHCONHEt', 'NHCSNHEt', 'OCHMe2', 'OCH2CH2CH3', 'CH2CH(OH)Me', 'C(OOH)Me2', 'SCHMe2', 'CH2NMe2',
+      'GeMe3', 'N+(Me)3', 'CH2NH+(Me)2', 'Si(Me)2OMe', 'OSiMe3', 'SiMe(OMe)2', 'Si(OMe)3', 'P+Me3', 'SiMe3', 'SnMe3',
+      '1-(1,2-(BH)10-C2Me)', 'CH2-1-(1,7-(BH)10-C2H)', 'CH2-1-(1,2-(BH)10-C2H)', '1-(1,2-(BH)10-C3H3HgCH3)',
+      '2-(hydroxymethyl)carboran-1-yl', 'I(OCOCF3)2', 'cyclo-C4F7', 'COCF2CF2CF3', 'C(CF3)3', '(CF2)3CF3', 'SO2C(CF3)3',
+      'SC(CF3)3', 'C(SCF3)3', 'SeC(CF3)3', 'C(CN)3', 'cyclo-1-(OH)C4F6', 'CH=C(CN)2', '2-(5-bromofuryl)', '1-maleimide',
+      '3-chloro-1-pyrroline-2,5-dione', '3-pyridazinyl', 'C(Me)(CN)2', '4-pyrimidinyl', '2-pyrimidinyl', '5-pyrimidinyl',
+      '2-furyl', '2-thienyl', '3-thienyl', '2-selenienyl', '2-tellurienyl', '1-pyrryl', '1-pyrroline-2,5-dione', 'CH=CHCOMe',
+      'I(OCOMe)2', 'N(COMe)2', 'cyclobutyl', 'COCHMe2', 'NHCOCH(Me)2', 'C(Me)3', 'CH(Me)Et', 'CH2CH(Me)2', '(CH2)3CH3',
+      'O(CH2)3CH3', 'CH2C(OH)Me2', 'C(OMe)3', 'AsEt2', 'As(O)Et2', 'As(S)Et2', 'NH(CH2)3CH3', 'N(Et)2', 'PO(Et)2', 'N=NPO(OEt)2',
+      'PO(OEt)2', 'P(Et)2', 'P(S)Et2', 'CH2N(Me)3+', 'CH2CH2NH(Me)2+', 'CH2OSi(CH3)3', 'CH2Si(Me)3', 'PO(N(Me)2)2', 'P(N(Me)2)2',
+      '2-(methylcarbonyl)carboran-l-yl', '2-[(carbonyloxy)methyl]carboran-l-yl', 'CH2-1-(1,2-(BH)10-C2Me)', 'C(CN)=C(CN)2',
+      '2-(5-cyanofuryl)', '2-(5-formylfuryl)', '2-pyridyl', '3-pyridyl', '4-pyridyl', '2-(4,6-dimethyl-s-triazinyl)', 
+      '1-cyclopentenyl', 'CH=CHCOOEt', 'cyclopentyl', 'COC(Me)3', 'NHCO2(CH2)3CH3', 'C(Et)(Me)2', 'CH2C(Me)3', '(CH2)4CH3',
+      'O(CH2)4CH3', 'CH2PO(OEt)2', 'CH2CH2N(Me)3+', 'CH2CH2Si(Me)3', 'Si(Me)2OSi(Me)3', 'CeCl5', 'C6F5', 'P(O)(C3F7)2', 'OP(O)(C3F7)2',
+      'NHP(O)(C3F7)2', 'CH2Co(CN)53-', 'CH2Mn(CO)5', 'C6H2-2,4,6-(N02)3', 'C6H4-3-Br', 'C6H4-4-Br', 'C6H4-3-Cl', 'C6H4-4-Cl', 'C6H4-3-F', 'C6H4-4-F', 'OC6H4-4-F', 'C6H4-3-I', 'C6H4-4-I',
+      'C6H4-3-NO2', 'C6H4-4-NO2', 'SC6H4-4-NO2', 'SOC6H4-4-NO2', '2-benzotriazolyl', 'C6H5', 'N(O)=NSO2C6H5', 'N=NC6H5', 'OC6H5', 'SOC6H5', '2-(5-acetylfuryl)', '2-(6-methylpyronyl)',
+      'SO2C6H5', 'OSO2C6H5', 'SC6H5', 'NHC6H5', 'HNSO2C6H5', 'SO2NHC6H5', '2-(5-ethylfuryl)', '1-(2,5-dimethylpyrryl)', '1-cyclohexenyl', 'cyclohexyl', 'N(C3H7)2', '(CH2)4NMe2', 'PO(isopropyl)2',
+      'P(isopropyl)2', 'P(O)(OPr)2', 'Ge(Et)3', '(CH2)3N(Me)3+', 'Si(OEt)3', 'P(Et)3+', 'Sn(Et)3', 'P(=NS02CF3)(C3F7)2', 'Si(NMe2)3', '2-benzoxazolyl', '2-benzthiazolyl', 'COC6H5', 'OCOC6H5', 'COOC6H5',
+      'N=CHC6H5', 'CH=NC6H5', 'NHCOC6H5', 'CONHC6H5', 'C6H4-4-Me', 'CH2C6H5', 'N=NC6H3-5-Me-2-OH', 'C6H4-4-OMe', 'CH(OH)C6H5', 'CH20C6H5', 'CH2SO2C6H5', 'C(Et)3', '(CH2)6CH3', 'SiMe(OSi(Me)3)2',
+      'CF2CF2C6H4-4-F', 'C≣CC6H5', 'CH=NCOC6H5', 'CH=CHC6H5', 'CH2Fe(CO)2(π-C5H5)', 'CH=NNHCOC6H5', 'N=CHC6H4-4-OMe', 'NHCOC6H4-4-OMe', 'SCH=NS02C6H4-4-Me', 'C6H4-4-Et', 'CH2CH2C6H5', 'N=C(Me)NHC6H5',
+      'Si(C6H5)(Me)2', 'S(Me)=NSO2C6H4-4-Me', '2,4,6-trimethylpyridinium', 'PO(CMe3)2', 'PO(C4H9)2', 'PO(OC4H9)2', 'P(CMe3)2', 'C6H5Cr(CO)3', '2-benzo-4-thiopyronyl', 
+      '2-(benzothiopyronyl)', '2- (benzo-1,4-pyronyl)', 'CH=CHCOC6H4-4-N02', 'CH2Mo(CO)3(C5H5)', 'CH=CHCOC6H5', 'C6H4-4-CHMe2', 'Si(OSiMe3)3', 'ferrocenyl', 'ferricenium+', 'ferrocenonium+',
+      'C6H4-4-CMe3', '1-adamantyl', '1-dibenzarsenyl', '1-dibenzoarsoxyl', '1-dibenzoarsazinyl', 'As(C6H5)2', 'AsO(C6H5)2', 'P(C6H5)2(BCl3)', 'N(C6H5)2', 'PO(C6H5)2', 'P(C6H5)2',
+      'PS(C6H5)2', 'P(N(C3H7)2)C6H4-3-F']; // 需要根據實際數據更新這個列表
+
+      function addRow() {
+        let table = document.getElementById("data-table");
+        let rowCount = table.rows.length;
+        let row = table.insertRow(rowCount);
+        let cell1 = row.insertCell(0);
+        let cell2 = row.insertCell(1);
+        let element1 = document.createElement("input");
+        element1.type = "text";
+        element1.name = `substituent${rowCount}`;
+        element1.setAttribute("list", "substituents-list");
+        cell1.appendChild(element1);
+
+        let element2 = document.createElement("input");
+        element2.type = "text";
+        element2.name = `value${rowCount}`;
+        cell2.appendChild(element2);
+
+        // Add delete button to new row
+        let deleteButton = document.createElement("button");
+        deleteButton.textContent = "Delete";
+        deleteButton.type = "button";
+        deleteButton.addEventListener("click", function() {
+          deleteRow(row);
+        });
+        cell2.appendChild(deleteButton);
+      }
+
+      function deleteRow(row) {
+        let table = document.getElementById("data-table");
+        table.deleteRow(row.rowIndex);
+      }
+
+      window.onload = function() {
+        // Dynamically create the datalist options using JavaScript
+        let datalist = document.getElementById("substituents-list");
+        substituents.forEach(function(substituent) {
+          let option = document.createElement("option");
+          option.value = substituent;
+          datalist.appendChild(option);
+        });
+
+        document.getElementById("add-row").onclick = addRow;
+      }
+    </script>
+  </head>
+  <body>
+    <div class="circle top-right"></div>
+    <div class="circle bottom-left"></div>
+    <form action="/plot" method="post">
+      <h1>Hammett Plot Generation</h1>
+      <div>
+        <label for="y_axis_label">Enter y-axis title</label>
+        <input type="text" id="y_axis_label" name="y_axis_label" required>
+      </div>
+      <div>
+        <label for="log_transform">Need to take the logarithm?</label>
+        <select id="log_transform" name="log_transform">
+          <option value="true">Yes</option>
+          <option value="false">No</option>
+        </select>
+      </div>
+      <div>
+        <label for="data">Enter data</label>
+        <table id="data-table">
+          <tr>
+            <th>substituent</th>
+            <th>value</th>
+          </tr>
+        </table>
+        <button type="button" id="add-row">Add new row</button>
+      </div>
+      <datalist id="substituents-list"></datalist>
+      <button type="submit"> Generate Plot </button>
+    </form>
+  </body>
+</html>

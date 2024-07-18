@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>文件上傳</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        font-size: 1.5rem; /* 字體變大 */
+        margin: 0;
+        background-color: #e0f7fa; /* 淺藍色背景 */
+      }
+      .main-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 2rem;
+      }
+      .container {
+        background-color: #ffffff; /* 白色背景 */
+        padding: 2rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        flex: 1;
+      }
+      h1 {
+        margin-bottom: 1rem;
+        color: #00796b; /* 綠色標題 */
+        position: relative;
+        z-index: 1;
+      }
+      div {
+        margin-bottom: 1rem;
+      }
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #00796b; /* 綠色標籤 */
+        position: relative;
+        z-index: 1;
+      }
+      input[type="file"] {
+        font-size: 1rem;
+      }
+      button {
+        font-size: 1.25rem; /* 字體變大 */
+        background-color: #009688; /* 綠色按鈕 */
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 0.25rem;
+        cursor: pointer;
+        position: relative;
+        z-index: 1;
+      }
+      button:hover {
+        background-color: #00796b; /* 深綠色按鈕 */
+      }
+      .button-container {
+        margin-top: 1rem;
+      }
+      .button-container button {
+        background-color: #009688; /* 綠色按鈕 */
+        margin-top: 1rem; /* 增加按鈕之間的間距 */
+      }
+      .button-container button:hover {
+        background-color: #00796b; /* 深綠色按鈕 */
+      }
+      .separator-text {
+        font-size: 2.50rem; /* 字體比之前更大 */
+        color: #00796b; /* 綠色文字 */
+        margin: 1rem 0; /* 上下間距 */
+      }
+      /* 裝飾性元素 */
+      .decoration {
+        position: absolute;
+        border-radius: 50%;
+        z-index: 0;
+      }
+      .decoration1 {
+        width: 200px;
+        height: 200px;
+        background-color: rgba(0, 123, 255, 0.1); /* 淺藍色圓 */
+        top: -50px;
+        right: -50px;
+      }
+      .decoration2 {
+        width: 150px;
+        height: 150px;
+        background-color: rgba(0, 150, 136, 0.1); /* 淺綠色圓 */
+        bottom: -50px;
+        left: -50px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main-container">
+      <div class="container">
+        <form action="/upload" method="post" enctype="multipart/form-data">
+          <h1>Upload PDF and Question File</h1>
+          <div>
+            <label for="pdf_files">Select PDF Document</label>
+            <input type="file" id="pdf_files" name="pdf_files" multiple>
+          </div>
+          <div>
+            <label for="question_file">Select Question Excel File</label>
+            <input type="file" id="question_file" name="question_file">
+          </div>
+          <button type="submit">upload</button>
+        </form>
+        <!-- 裝飾性元素 -->
+        <div class="decoration decoration1"></div>
+        <div class="decoration decoration2"></div>
+      </div>
+      <div class="container">
+        <h1>Hammett Plot Generation</h1>
+        <div class="button-container">
+          <button onclick="window.location.href='/hammett'">Generate the plot</button>
+        </div>
+        <!-- 裝飾性元素 -->
+        <div class="decoration decoration1"></div>
+        <div class="decoration decoration2"></div>
+      </div>
+    </div>
+  </body>
+</html>

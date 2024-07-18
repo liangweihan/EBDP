@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Hammett Plot Result</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        font-size: 1.5rem;
+        margin: 0;
+        background-color: #e0f7fa; /* Background color changed */
+        position: relative; /* For positioning the circles */
+        height: 100vh; /* Full viewport height */
+      }
+      h1 {
+        margin-bottom: 1rem;
+        color: #00796b; /* Title color */
+      }
+      img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 0.5rem;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+        margin-bottom: 1rem;
+      }
+      a {
+        font-size: 1.25rem;
+        background-color: #009688; /* Button color */
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 0.25rem;
+        text-decoration: none;
+        margin: 1rem 0;
+      }
+      a:hover {
+        background-color: #00796b;
+      }
+      .circle {
+        position: absolute;
+        border-radius: 50%;
+        background-color: #e0f7fa;
+      }
+      .circle.top-right {
+        width: 100px;
+        height: 100px;
+        top: -50px;
+        right: -50px;
+      }
+      .circle.bottom-left {
+        width: 150px;
+        height: 150px;
+        bottom: -75px;
+        left: -75px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="circle top-right"></div>
+    <div class="circle bottom-left"></div>
+    <h1>Hammett Plot Generation</h1>
+    <img src="{{ image_path }}" alt="Hammett Plot">
+    <a href="{{ url_for('uploaded_file', filename='hammett_plot.png') }}" download>Download the plot</a>
+    <a href="{{ url_for('uploaded_file', filename='output.xlsx') }}" download>Download the data</a>
+  </body>
+</html>
